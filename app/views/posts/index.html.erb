@@ -1,0 +1,20 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Posts</h1>
+<%= link_to "New post", new_post_path %>
+<%= search_form_for @q, remote: true do |f| %>
+  <%= f.label :content_cont, 'Content' %>
+  <%= f.search_field :content_cont %>
+  <%= f.submit %>
+<% end %>
+<div id="posts">
+  <% @posts.each do |post| %>
+    <%= render post %>
+        <p class="lead">
+        <%= button_to "show this post", post, class:"btn btn-primary", method: :get %>
+      </p>
+    </div>
+    </div>
+  <% end %>
+</div>
+
