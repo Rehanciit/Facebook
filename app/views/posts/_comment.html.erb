@@ -1,0 +1,13 @@
+<!-- comments/_comment.html.erb -->
+
+<%= comment.user.name %>: <%= comment.content %><br>
+<p>
+  <%= link_to "Show this comment", comment %><br>
+  <%= link_to "Reply to this comment", newreply_path(@post, comment) %>
+</p>
+
+<% comment.replies.each do |reply| %>
+  <div style="margin-left: 20px;">
+    <%= render partial: 'comment', locals: { comment: reply } %>
+  </div>
+<% end %>

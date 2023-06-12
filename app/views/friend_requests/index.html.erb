@@ -1,0 +1,29 @@
+<h1>Users</h1>
+
+<div id="users">
+  <% @users.each do |user| %>
+    <%# render friend %>
+    <%=user.username%>
+    <% if(@sent_friend_requestsids.include?(user.id)) %>
+      <p>
+        <%= button_to "UnSend Freind Request", deletefriendrequest_path(user), method: :delete, remote: true%>
+      </p>
+    <% elsif(@received_friend_requestsids.include?(user.id)) %>
+      <P>
+        <%= button_to "Accept Freind Request", acceptfriendrequest_path(user,accept:true), method: :put, remote: true%>
+      </p>
+    <% elsif(@friends.pluck(:id).include?(user.id)) %>
+      <p> 
+      <%= button_to "Unfriend", deletefriendrequest_path(user), method: :delete, remote: true%>
+      </p>
+    <% elsif(!@sent_friend_requestsids.include?(user.id) && !@received_friend_requestsids.include?(user.id)) %>
+      <p> 
+        <%= button_to "Send Freind Request", sendfriendrequest_path(user), method: :put, remote: true%>
+      </p>
+    <%end%>
+    
+    
+    
+    
+  <% end %>
+</div>

@@ -1,0 +1,59 @@
+
+<%= render @post %>
+  likes: <%=@likes.size%></br>
+  comments: <%=@comments.size%>
+  <p class="lead">
+  <% if(current_user && @likes.include?(current_user.id)) %>
+  <%= link_to "unlike this post", unlike_path(@post), class:"btn btn-danger", data: { "turbo-method": :delete }%>
+  <% elsif current_user%>
+  <%= link_to "like this post", like_path(@post), class:"btn btn-success", data: { "turbo-method": :put }%>
+  <% else %>
+  <%= link_to "like this post", new_user_session_path, class: "btn btn-success" %>
+  <%end%>
+  <%= link_to "comment this post", newcomment_path(@post), class:"btn btn-success"%>
+  </br>
+
+  <%= link_to "Back to posts", posts_path ,class:"btn btn-primary mt-2"%></br>
+  <% if current_user && @post.user_id==current_user.id%>
+  <%= link_to "Edit this post", edit_post_path(@post), class:"btn btn-secondary mt-2"%>
+  <%= link_to "Destroy this post", @post, method: :delete, class:"btn btn-danger mt-2" ,data: { "turbo-method": :delete }%>
+  <%end%>
+  </p>
+  <h2>Comments:</h1>
+  <div id="comments" class="mt-2">
+    <%= render_comments(@comments) %>
+  </div>
+</div>
+
+
+
+
+<% def render_comments(comments) %>
+  <% comments.each do |comment| %>
+    <% unless comment.parent_comment %>
+      <div>
+        <strong><%= comment.user.name %></strong>: <%= comment.content %><br>
+        <p>
+          <%= link_to "Show this comment", comment %><br>
+          <%= link_to "Reply to this comment", newreply_path(@post, comment) %>
+        </p>
+        <%# render_child_comments(comment.replies) %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% def render_child_comments(replies) %>
+  <% replies.each do |reply| %>
+    <div style="margin-left: 20px;">
+      <strong><%= reply.user.name %></strong>: <%= reply.content %><br>
+      <p>
+        <%= link_to "Show this comment", reply %><br>
+        <%= link_to "Reply to this comment", newreply_path(@post, reply) %>
+      </p>
+      <%= render_child_comments(reply.replies) %>
+    </div>
+  <% end %>
+<% end %>
+
+</div>
